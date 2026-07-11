@@ -1,7 +1,6 @@
 import numpy as np
 from PIL import Image
 import os
-from pathlib import Path
 
 def get_most_uses_neirons(layers_results):
     most_uses_neirons = []
@@ -15,12 +14,19 @@ def compare_thing (A,B):
     return diff
 
 def get_images():
-    images = []
+    cats = []
+    dogs = []
     for filename in os.listdir('./image/'):
-        if filename.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp')):
-            img = Image.open(os.path.join('./image/', filename)).convert('L')
-            img = img.resize((50, 50))
-            img_array = np.array(img)
-            img_array = img_array.astype(np.float32) / 255.0
-            images.append(img_array)
-    return images
+        img = Image.open(os.path.join('./image/', filename)).convert('L')
+        img = img.resize((50, 50))
+        img_array = np.array(img)
+        img_array = img_array.astype(np.float32) / 255.0
+
+        if filename.lower().startswith(('cat')):
+            cats.append(img_array)
+        else:
+            dogs.append(img_array)
+    return (cats, dogs)
+
+def element_wise_sum (arrays):
+    return [sum(values) for values in zip(*arrays)]
